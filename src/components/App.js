@@ -138,15 +138,74 @@ const states = [{
 }];
 
 
-function App() 
-{
-	// Do not alter/remove main div
+function App() {
+	
+	const [selectedState, setSelectedState] = useState('');
+	const [selectedCity, setSelectedCity] = useState('');
+	const [selectedLandmark, setSelectedLandmark] = useState('');
+
+	const handleStateChange = (event) => {
+		setSelectedState(event.target.value);
+		setSelectedCity('');
+		setSelectedLandmark('');
+	};
+
+	const handleCityChange = (event) => {
+		setSelectedCity(event.target.value);
+		setSelectedLandmark('');
+	};
+
+	const handleLandmarkChange = (event) => {
+		setSelectedLandmark(event.target.value);
+	};
+
 	return (
-	<div id="main">
-		
-	</div>
+		<div>
+			<h2>State:</h2>
+			<select value={selectedState} onChange={handleStateChange}>
+				<option value="">Select a state</option>
+				{states.map((state, index) => (
+					<option key={index} value={state.name}>{state.name}</option>
+				))}
+			</select>
+
+			{selectedState && (
+				<div>
+					<h2>City:</h2>
+					<select value={selectedCity} onChange={handleCityChange}>
+						<option value="">Select a city</option>
+						{states.find(state => state.name === selectedState).cities.map((city, index) => (
+							<option key={index} value={city.name}>{city.name}</option>
+						))}
+					</select>
+				</div>
+			)}
+
+			{selectedCity && (
+				<div>
+					<h2>Landmark:</h2>
+					<select value={selectedLandmark} onChange={handleLandmarkChange}>
+						<option value="">Select a landmark</option>
+						{states.find(state => state.name === selectedState).cities.find(city => city.name === selectedCity).landmarks.map((landmark, index) => (
+							<option key={index} value={landmark.name}>{landmark.name}</option>
+						))}
+					</select>
+				</div>
+			)}
+
+			{selectedLandmark && (
+				<div>
+					<h2>Selected:</h2>
+					<p>State: {selectedState}</p>
+					<p>City: {selectedCity}</p>
+					<p>Landmark: {selectedLandmark}</p>
+				</div>
+			)}
+		</div>
 	);
-}
+};
+
+
 
 
 export default App;
